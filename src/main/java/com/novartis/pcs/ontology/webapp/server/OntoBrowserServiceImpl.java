@@ -94,8 +94,7 @@ public class OntoBrowserServiceImpl extends RemoteServiceServlet implements
 			}
 		}
 		
-		//return username;
-		return "RAVAGCA1";
+		return username;
 	}
 	
 	@Override
