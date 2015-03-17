@@ -1,0 +1,252 @@
+.vert-scroll {
+    overflow-y: auto;
+}
+
+.fixed-height {
+    height: 155px;
+}
+
+.padded-border {
+	margin: 10px;
+	padding: 10px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #999;	
+}
+
+.search-header {
+	color: #EC8026;
+	white-space: nowrap;
+	padding-bottom: 2px;
+	font-weight: bold;
+	display: block;
+    /*
+    border-bottom-width:2px;
+    border-bottom-style:solid;
+    border-bottom-color:#EC8026;
+    margin-bottom: 2px;
+    */
+}
+
+.search-option {
+	color: #4B4A4A;
+	white-space: nowrap;
+}
+
+table.search-options {
+	border-spacing: 4px;
+}
+
+div.search-results {
+	position: absolute;
+	top: 154px;
+	bottom: 0px;
+	width: 258px;
+}
+
+ul.search-results {
+	margin: 0;
+	padding: 0;
+	line-height: 16px;
+}
+
+ul.search-results li {
+	list-style-type: none;
+	background: url('images/bullet.png') no-repeat 0 6px transparent;
+	padding-left: 12px;
+}
+
+.search-result-tag {
+	color: #a9a9a9;
+	line-height: 11px;
+	font-size: 9px;
+	margin-left: 4px;
+	white-space: nowrap;
+	position: relative;
+	bottom: 2px;
+	
+	/*
+	color: #29477F;
+	line-height: 12px;
+	font-size: 9px;
+	margin-left: 4px;
+	white-space: nowrap;
+	position: relative;
+	bottom: 2px;
+	background-color: #E5ECF9;
+	border-color: #B8CDF0;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 6px;
+	padding: 0px 2px 1px 2px;
+	*/
+}
+
+input.search {
+    background-color: #FFFFFF;
+	background-image: url('images/search.png');
+	background-repeat: no-repeat;
+	background-position: 4px 4px;
+	font-family: verdana,helvetica,arial;
+    font-size: 11px;
+    padding: 3px 3px 3px 22px;
+    width: 280px;
+    margin: 10px;
+    
+    box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 12px;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+}
+
+.highlighted-text {
+    color: #EC8026;
+}   
+                        
+td.label {
+	color: #4B4A4A;
+	font-weight: bold;
+	text-align:right;
+    vertical-align: top;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-right: 4px;
+    white-space: nowrap;
+}
+
+svg {
+    display: block;
+    margin: auto;
+}
+
+svg g.node ellipse:hover {
+  fill: #91B9CE;
+}
+
+td div select {
+	margin: 0px;
+}
+
+td div button {
+	margin: 0px;
+}
+
+.dialog-label {
+	color: #4B4A4A;
+	font-weight: bold;
+	padding: 2px;
+	white-space: nowrap;
+}
+
+.dialog-message {
+	color: #a9a9a9;
+	/* font-style: italic; */
+	padding: 2px;
+}
+
+.dialog-error {
+	color: #cd0a0a;
+	padding: 2px;
+	vertical-align: middle;
+	height: 16px;
+}
+
+.dialog-error-icon {
+	color: #cd0a0a;
+	vertical-align: middle;
+	background-image: url('images/error.png');
+	background-size: 16px 16px;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-left: 18px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+}
+
+.dialog-buttons td {
+	padding: 4px;
+}
+
+table.gwt-CellTable th {
+	white-space: nowrap;
+	text-shadow: none;
+	font-weight: bold;
+}
+
+table.gwt-CellTable td, table.gwt-CellTable th {
+	padding: 2px 4px;
+}
+
+table.gwt-CellTable td.icon-action {
+	padding: 0px;
+	width: 16px;
+}
+
+table.gwt-CellTable td.icon-action div img {
+	vertical-align: middle;
+}
+
+table.gwt-CellTable td.icon-action div img:hover {
+	cursor: pointer;
+}
+
+table.gwt-CellTable td.clickable-text div {
+	cursor: pointer;
+}
+
+table.gwt-Grid td {
+	padding: 2px 4px;
+}
+
+table.dialog-vpanel {
+	border-spacing: 8px;
+}
+
+table.dialog-hpanel {
+	border-spacing: 4px;
+}
+
+.codelist-term {
+	border-bottom: 1px solid #999999;
+	padding-left: 6px;
+	padding-top: 6px;
+	padding-right: 6px;
+	padding-bottom: 6px;
+	display: block;
+}
+
+.decorator-panel {
+	padding: 6px 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #999;	
+}
+
+.centered {
+	display: block;
+	margin: auto;
+}
+
+.centered-hortz {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.float-right {
+	float: right;
+}
+
+.spaced-vert {
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.nowrap {
+	white-space: nowrap;
+}

@@ -1,0 +1,95 @@
+body, table td, select, button, input, textarea {
+	font-family: verdana,helvetica,arial;
+	font-size: 11px;
+	color: #333333;
+}
+
+textarea {
+    resize: none;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+	color: #29477F;
+	text-decoration: none;
+}
+
+.gwt-DialogBox .Caption {
+	font-family: verdana,helvetica,arial;
+	color: #4B4A4A;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.gwt-MenuBar .gwt-MenuItem {
+	font-family: verdana,helvetica,arial;
+	font-size: 11px;
+	color: #333333;
+}
+
+.gwt-TextArea, .gwt-TextBox {
+	font-family: verdana,helvetica,arial;
+	font-size: 11px;
+	color: #333333;
+	padding: 4px;
+}
+
+.gwt-CheckBox label {
+	margin-left: 2px;
+}
+
+.gwt-Button {
+	font-family: verdana,helvetica,arial;
+	font-size: 11px;
+	color: #333333;
+}
+
+.busy-icon-center {
+	background-image: url('images/spinner.gif') !important;
+	background-size: 16px 16px !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+}
+
+.busy-icon-right-padded {
+	padding-right: 16px !important;
+}
+
+.busy-icon-right {
+	background-image: url('images/spinner.gif') !important;
+	background-size: 16px 16px !important;
+	background-repeat: no-repeat !important;
+	background-position: right !important;
+}
+
+.error-icon-right {
+	background-image: url('images/error.png') !important;
+	background-size: 16px 16px !important;
+	background-repeat: no-repeat !important;
+	background-position: right !important;
+}
+
+.busy-icon-left {
+	background-image: url('images/spinner.gif') !important;
+	background-repeat: no-repeat !important;
+	background-position: left !important;
+}
+
+.error-icon-left {
+	background-image: url('images/error.png') !important;
+	background-size: 16px 16px !important;
+	background-repeat: no-repeat !important;
+	background-position: left !important;
+	color: #930000;
+}
+
+.info-icon-left {
+	background-image: url('images/info.png') !important;
+	background-size: 16px 16px !important;
+	background-repeat: no-repeat !important;
+	background-position: left !important;
+	padding-left: 20px !important;
+}
+
+.text-area-right-padded {
+	padding-right: 10px;
+}
