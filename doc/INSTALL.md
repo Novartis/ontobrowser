@@ -1,7 +1,7 @@
 Building and Deploying OntoBrowser
 ---
 ## System Requirements
-* [Java Development Kit (JDK)](http://www.oracle.com/technetwork/java/javase/overview/) version 7 (or above) - [Download](http://www.oracle.com/technetwork/java/javase/downloads/)
+* [Java Development Kit (JDK)](http://www.oracle.com/technetwork/java/javase/overview/) version 8 (or above) - [Download](http://www.oracle.com/technetwork/java/javase/downloads/)
 * [Apache Maven](http://maven.apache.org) version 3 (or above) - [Download](http://maven.apache.org/download.cgi)
 * [Graphviz](http://www.graphviz.org) version 2.28 (or above) - [Download](http://www.graphviz.org/Download.php)
 * [Wildfly](http://wildfly.org) version 8.2 (or above) - [Download](http://wildfly.org/downloads/) [Install](https://docs.jboss.org/author/display/WFLY8/Getting+Started+Guide)
