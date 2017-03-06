@@ -101,6 +101,10 @@ public class ApproveRejectSynonymComposite extends ApproveRejectComposite<Synony
 						.getControlledVocabulary()
 						.getDatasource()
 						.getAcronym();
+			} else if(synonym.getDatasource() != null) {
+				value = synonym
+						.getDatasource()
+						.getAcronym();
 			}
 			return value;
 		}

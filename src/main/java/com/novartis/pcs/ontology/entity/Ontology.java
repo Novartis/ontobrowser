@@ -19,6 +19,7 @@ package com.novartis.pcs.ontology.entity;
 
 import java.util.Date;
 
+import javax.persistence.AssociationOverride;
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,6 +43,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "ONTOLOGY", uniqueConstraints = @UniqueConstraint(columnNames = "ONTOLOGY_NAME"))
 @AttributeOverride(name = "id", 
 		column = @Column(name = "ONTOLOGY_ID", unique = true, nullable = false))
+@AssociationOverride(name = "curatorActions", joinColumns = @JoinColumn(name = "ONTOLOGY_ID"))
 @NamedQueries({
 		@NamedQuery(name=Ontology.QUERY_BY_NAME,
 				query="select o from Ontology as o where o.name = :name",

@@ -102,8 +102,8 @@ CREATE TABLE DATASOURCE
     IS_INTERNAL         NUMBER(1)       NOT NULL
                                         CONSTRAINT DATASOURCE_IS_INTERNAL_CK
                                         CHECK(IS_INTERNAL IN (0,1)),
-    IS_PUBLIC           NUMBER(1)       NOT NULL
-                                        DEFAULT 0
+    IS_PUBLIC           NUMBER(1)       DEFAULT 0
+                                        NOT NULL
                                         CONSTRAINT DATASOURCE_IS_PUBLIC_CK
                                         CHECK(IS_PUBLIC IN (0,1)),
     RELEASE_DATE        DATE            NULL,
@@ -439,18 +439,10 @@ CREATE TABLE TERM_XREF
     CREATED_BY          NUMBER(12)      NOT NULL
                                         CONSTRAINT TERM_XREF_CREATED_BY_FK
                                         REFERENCES CURATOR,
-    CREATED_VERSION_ID  NUMBER(12)      NOT NULL
-                                        CONSTRAINT TERM_XREF_CREATED_VERSION_FK
-                                        REFERENCES VERSION,
-    APPROVED_VERSION_ID NUMBER(12)      NULL
-                                        CONSTRAINT TERM_XREF_APPROVED_VERSION_FK
-                                        REFERENCES VERSION,
-    OBSOLETE_VERSION_ID NUMBER(12)      NULL
-                                        CONSTRAINT TERM_XREF_OBSOLETE_VERSION_FK
-                                        REFERENCES VERSION,
-    REPLACED_BY         NUMBER(12)      NULL
-                                        CONSTRAINT TERM_XREF_REPLACED_BY_FK
-                                        REFERENCES TERM_XREF
+    MODIFIED_DATE       DATE            NULL,
+    MODIFIED_BY         NUMBER(12)      NULL
+                                        CONSTRAINT TERM_XREF_MODIFIED_BY_FK
+                                        REFERENCES CURATOR
 );
 
 CREATE INDEX TERM_XREF_TERM_IDX
