@@ -40,9 +40,12 @@ import org.apache.commons.io.IOUtils;
 @Stateless
 @Local(DOTProcessLocal.class)
 public class DOTProcessImpl implements DOTProcessLocal {
-	private static Charset CHARSET = Charset.forName("UTF-8");
-	private static byte[] SVG_START = "<svg width=".getBytes(CHARSET);
-	private static byte[] SVG_END = "</svg>\n".getBytes(CHARSET);
+	private static final Charset CHARSET = Charset.forName("UTF-8");
+	private static final String EOL = System.lineSeparator();
+	private static final String DOT_END = "}" + EOL;
+	private static final byte[] SVG_START = "<svg width=".getBytes(CHARSET);
+	private static final byte[] SVG_END = ("</svg>" + EOL).getBytes(CHARSET);
+	
 		
 	private Logger logger = Logger.getLogger(getClass().getName());
 	
@@ -131,8 +134,8 @@ public class DOTProcessImpl implements DOTProcessLocal {
     	// so we don't cause a deadlock. Note: because of dot's well defined
     	// behavior we don't need multiple threads to wait on the dot process
     	// stdout and stderr. BTW, creating threads in a SLSB is illegal!
-    	if(!dot.endsWith("}\n")) {
-    		throw new IllegalArgumentException("Invalid DOT syntax: must end with '}\\n'");
+    	if(!dot.endsWith(DOT_END)) {
+    		throw new IllegalArgumentException("Invalid DOT syntax: must end with '}'");
     	}
     	
     	try {

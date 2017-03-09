@@ -43,6 +43,7 @@ import com.novartis.pcs.ontology.service.util.TermNameComparator;
 @Local(OntologyGraphServiceLocal.class)
 @Remote(OntologyGraphServiceRemote.class)
 public class OntologyGraphServiceImpl implements OntologyGraphServiceRemote, OntologyGraphServiceLocal {
+	private static final String EOL = System.lineSeparator();
 	private Logger logger = Logger.getLogger(getClass().getName()); 
 	
 	@EJB
@@ -99,14 +100,14 @@ public class OntologyGraphServiceImpl implements OntologyGraphServiceRemote, Ont
 			}
 		}
 				
-		dot.append("digraph \"").append(escape(term.getName())).append("\" {\n");
+		dot.append("digraph \"").append(escape(term.getName())).append("\" {").append(EOL);
 		dot.append("\tgraph [rankdir=")
 			.append(orientation.name())
-			.append(", ranksep=0.3, pad=0.4, margin=0];\n");
+			.append(", ranksep=0.3, pad=0.4, margin=0];").append(EOL);
 		dot.append("\tnode [id=\"\\N\", fontname=\"Tahoma\", fontsize=\"8\"")
 			.append(", fontcolor=\"#333333\", penwidth=\"2\", style=\"filled\"")
-			.append(", color=\"#333333\", fillcolor=\"#E3E3E3\"];\n");	
-		dot.append("\tedge [id=\"\\T-\\H\", dir=\"back\", penwidth=\"2\"];\n");
+			.append(", color=\"#333333\", fillcolor=\"#E3E3E3\"];").append(EOL);	
+		dot.append("\tedge [id=\"\\T-\\H\", dir=\"back\", penwidth=\"2\"];").append(EOL);
 		
 		terms = new ArrayList<Term>(terms);
 		Collections.sort((List<Term>)terms, new TermNameComparator());
@@ -118,7 +119,7 @@ public class OntologyGraphServiceImpl implements OntologyGraphServiceRemote, Ont
 			if(t.equals(term)) {
 				dot.append(", fillcolor=\"#91B9CE\"");
 			}
-			dot.append("];\n");
+			dot.append("];").append(EOL);
 		}
 		
 		int invisibleCount = 0;
@@ -137,24 +138,24 @@ public class OntologyGraphServiceImpl implements OntologyGraphServiceRemote, Ont
 				dot.append("\t\"")
 					.append(srcId).append("\" -> \"").append(destId)
 					.append("\" [edgetooltip=\"").append(escape(type))
-					.append("\", color=\"").append(color).append("\"];\n");
+					.append("\", color=\"").append(color).append("\"];").append(EOL);
 				
 				if(term.equals(relationship.getRelatedTerm()) && !relationship.isLeaf()) {
 					String grandChildColour = "#000000";				
 					String grandChildId = "invisible" + (++invisibleCount);
 					
 					dot.append("\t\"").append(grandChildId)
-						.append("\" [shape=\"point\", style=\"invis\"];\n");
+						.append("\" [shape=\"point\", style=\"invis\"];").append(EOL);
 					
 					dot.append("\t\"")
 						.append(destId).append("\" -> \"").append(grandChildId)
 						.append("\" [edgetooltip=\"").append("...")
-						.append("\", color=\"").append(grandChildColour).append("\"];\n");
+						.append("\", color=\"").append(grandChildColour).append("\"];").append(EOL);
 				}
 			}
 		}
 		
-		dot.append("}\n");
+		dot.append("}").append(EOL);
 		
 		return dot.toString();
 	}
