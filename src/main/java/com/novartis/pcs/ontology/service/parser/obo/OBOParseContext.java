@@ -438,6 +438,7 @@ public class OBOParseContext implements OBOParserHandler {
 				case ']':
 				case '{':
 				case '}':
+				case '!':
 					sb.append(c);
 					break;
 				default:
