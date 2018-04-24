@@ -19,7 +19,7 @@ package com.novartis.pcs.ontology.service.export;
 
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.createIRI;
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.escapeOBO;
-import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.escapeQuote;
+import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.escapeQuoted;
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.getRelationshipIRI;
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.isBuiltIn;
 
@@ -194,9 +194,9 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 						|| term.getStatus().equals(Status.OBSOLETE)) {
 					writer.append("[Term]\n")
 						.append("id: ").append(term.getReferenceId()).append("\n")
-						.append("name: ").append(escapeOBO(term.getName())).append("\n");
+						.append("name: ").append(escapeOBO(term.getName(), false)).append("\n");
 					if(term.getDefinition() != null) {
-						writer.append("def: \"").append(escapeQuote(term.getDefinition())).append("\" [");
+						writer.append("def: \"").append(escapeQuoted(term.getDefinition())).append("\" [");
 						if(term.getUrl() != null) {
 							writer.append(term.getUrl());
 						}
@@ -213,7 +213,7 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 									}
 									
 									if(xref.getDescription() != null) {
-										writer.append(" \"").append(escapeQuote(xref.getDescription())).append("\"");
+										writer.append(" \"").append(escapeQuoted(xref.getDescription())).append("\"");
 									}
 								} else if(xref.getUrl() != null) {
 									writer.append(xref.getUrl());
@@ -225,7 +225,7 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 					}
 					
 					if(term.getComments() != null) {
-						writer.append("comment: ").append(escapeOBO(term.getComments())).append("\n");
+						writer.append("comment: ").append(escapeOBO(term.getComments(), false)).append("\n");
 					}
 					
 					for(Synonym synonym : term.getSynonyms()) {
@@ -246,7 +246,7 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 							
 							if(datasource == null || xrefDatasources.contains(datasource)) {
 								writer.append("synonym: \"")
-									.append(escapeQuote(synonym.getSynonym())).append("\"")
+									.append(escapeQuoted(synonym.getSynonym())).append("\"")
 									.append(" ").append(synonym.getType().name()).append(" [");
 								if(datasource != null) {
 									writer.append(escapeOBO(datasource.getAcronym()));
@@ -255,7 +255,7 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 									}
 									
 									if(description != null) {
-										writer.append(" \"").append(escapeQuote(description)).append("\"");
+										writer.append(" \"").append(escapeQuoted(description)).append("\"");
 									}
 								} else if(synonym.getUrl() != null) {
 									writer.append(synonym.getUrl());
@@ -268,7 +268,7 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 					for(CrossReference xref : term.getCrossReferences()) {
 						if(!xref.isDefinitionCrossReference() &&
 								(xref.getDatasource() == null || xrefDatasources.contains(xref.getDatasource()))) {
-							writer.append("xref: \"");
+							writer.append("xref: ");
 							if(xref.getDatasource() != null) {
 								writer.append(escapeOBO(xref.getDatasource().getAcronym()));
 								if(xref.getReferenceId() != null) {
@@ -276,7 +276,7 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 								}
 								
 								if(xref.getDescription() != null) {
-									writer.append(" \"").append(escapeQuote(xref.getDescription())).append("\"");
+									writer.append(" \"").append(escapeQuoted(xref.getDescription())).append("\"");
 								}
 							} else if(xref.getUrl() != null) {
 								writer.append(xref.getUrl());

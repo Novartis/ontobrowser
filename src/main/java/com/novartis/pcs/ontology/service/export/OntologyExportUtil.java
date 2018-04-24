@@ -196,6 +196,10 @@ class OntologyExportUtil {
 	}
 	
 	static String escapeOBO(String s) {
+		return escapeOBO(s, true);
+	}
+	
+	static String escapeOBO(String s, boolean strict) {
 		StringBuilder buffer = new StringBuilder(s.length());
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
@@ -208,18 +212,48 @@ class OntologyExportUtil {
 			case '\t':	
 				buffer.append("\\t");
 				break;
-			case ':':
-			case ',':
+			case '\\':
+			case '!':
+				buffer.append("\\");
+			default:
+				if(strict) {
+					switch (c) {
+					case ':':
+					case ',':
+					case '"':
+					// Although \( and \) are both valid escape sequences,
+					// the OBOEdit2 parsers complain with: Unrecognized escape character
+					//case '(':
+					//case ')':	
+					case '[':
+					case ']':
+					case '{':
+					case '}':
+						buffer.append("\\");
+					}
+				}
+				buffer.append(c);
+			}
+		}
+
+		return buffer.toString();
+	}
+	
+	static String escapeQuoted(String s) {
+		StringBuilder buffer = new StringBuilder(s.length());
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			switch (c) {
+			case '\f':
+			case '\n':
+			case '\r':
+				buffer.append("\\n");
+				break;
+			case '\t':	
+				buffer.append("\\t");
+				break;
 			case '"':
 			case '\\':
-			// Although \( and \) are both valid escape sequences,
-			// the OBOEdit2 parsers complain with: Unrecognized escape character
-			//case '(':
-			//case ')':	
-			case '[':
-			case ']':
-			case '{':
-			case '}':
 			case '!':
 				buffer.append("\\");
 			default:
@@ -228,10 +262,6 @@ class OntologyExportUtil {
 		}
 
 		return buffer.toString();
-	}
-	
-	static String escapeQuote(String s) {
-		return s.replace("\"", "\\\"").replace("\n","\\n");
 	}
 	
 	static IRI createIRI(URI baseURI, String path) {
