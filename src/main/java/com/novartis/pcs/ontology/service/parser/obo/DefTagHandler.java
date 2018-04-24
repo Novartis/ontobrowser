@@ -19,6 +19,7 @@ package com.novartis.pcs.ontology.service.parser.obo;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.coode.owlapi.obo.parser.OBOVocabulary;
 
@@ -56,25 +57,41 @@ public class DefTagHandler extends OBOTagHandler {
 				List<String> xrefs = split(xrefList, ',');
 				for(String xref : xrefs) {
 					int colon = indexOf(xref, ':', 0);
-					if(colon == -1) {
+					int quote = indexOf(xref, '"', colon+1);
+					
+					String datasource = null;
+					String refId = null;
+					if(colon != -1) {	
+						datasource = xref.substring(0, colon);
+						refId = quote == -1 ? xref.substring(colon+1) : xref.substring(colon+1, quote);					
+					} else {
+						datasource = xref;
+					}		
+					
+					datasource = StringUtils.trimToNull(datasource);
+					refId = StringUtils.trimToNull(refId);
+					
+					if(datasource == null) {
 						throw new InvalidFormatException("Invalid OBO xref (no datasource): " + xref);
 					}
-					String datasourceAcronym = xref.substring(0,colon);
-					int quote = indexOf(xref, '"', colon+1);
-					String refId = quote == -1 ? xref.substring(colon+1) : xref.substring(colon+1, quote);
 					
-					datasourceAcronym = context.unescapeTagValue(datasourceAcronym);
-					refId = context.unescapeTagValue(refId);
-					CrossReference defXref = null;
-					
-					if(UrlParser.isValidProtocol(datasourceAcronym)) {
-						String url = datasourceAcronym + ":" + refId;
-						defXref = addCrossReference(url, true);
-					} else {
-						defXref = addCrossReference(datasourceAcronym, refId, true);
+					datasource = context.unescapeTagValue(datasource);
+					if(refId != null) {
+						refId = context.unescapeTagValue(refId);	
 					}
 					
-					if(quote != -1) {
+					CrossReference defXref = null;
+					if(UrlParser.isValidProtocol(datasource)) {
+						if(refId == null) {
+							throw new InvalidFormatException("Invalid xref URL: " + xref);
+						}							
+						String url = datasource + ":" + refId;
+						defXref = addCrossReference(url, true);
+					} else {
+						defXref = addCrossReference(datasource, refId, true);
+					}
+					
+					if(defXref != null && quote != -1) {
 						fromIndex.setValue(quote);
 						String description = substr(xref, '"', '"', fromIndex);
 						description = context.unescapeTagValue(description);

@@ -20,6 +20,7 @@ package com.novartis.pcs.ontology.service.parser.obo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.coode.owlapi.obo.parser.OBOVocabulary;
 
@@ -142,7 +143,7 @@ abstract class OBOTagHandler {
     		if(existing.isDefinitionCrossReference() == definition
     				&& existing.getUrl() == null
     				&& datasource.equals(existing.getDatasource())) {
-    			if(!refId.equals(existing.getReferenceId())) {
+    			if(!StringUtils.equals(refId, existing.getReferenceId())) {
     				existing.setReferenceId(refId);
     			}
     			xref = existing;
