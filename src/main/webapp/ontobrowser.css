@@ -6,6 +6,14 @@
     height: 155px;
 }
 
+.remaining-height {
+	position: absolute;
+	top: 197px;
+	bottom: 0px;
+	right: 0px;
+	left: 0px;
+}
+
 .padded-border {
 	margin: 10px;
 	padding: 10px;
@@ -42,7 +50,8 @@ div.search-results {
 	position: absolute;
 	top: 154px;
 	bottom: 0px;
-	width: 258px;
+	right: 0px;
+	left: 0px;
 }
 
 ul.search-results {
@@ -91,7 +100,7 @@ input.search {
 	font-family: verdana,helvetica,arial;
     font-size: 11px;
     padding: 3px 3px 3px 22px;
-    width: 280px;
+    width: 310px;
     margin: 10px;
     
     box-sizing: border-box;

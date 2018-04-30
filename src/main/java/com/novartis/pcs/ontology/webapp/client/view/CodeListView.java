@@ -126,4 +126,15 @@ public class CodeListView extends OntoBrowserView implements ViewTermHandler {
 			}
 		}
 	}
+/*
+	@Override
+	public void onResize() {
+		// For some reason GWT throws a ClassCastException on resize.
+		try {
+			super.onResize();
+		} catch(ClassCastException e) {
+			GWT.log("ClassCastException on resize", e);
+		}
+	}
+*/
 }

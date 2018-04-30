@@ -165,7 +165,7 @@ public class TermSynonymsView extends OntoBrowserView implements ViewTermHandler
 		panel.add(table);
 		
 		initWidget(panel);
-		addStyleName("padded-border vert-scroll fixed-height");
+		addStyleName("padded-border vert-scroll");
 		
 		eventBus.addHandler(ViewTermEvent.TYPE, this);
 		eventBus.addHandler(SynonymUpdatedEvent.TYPE, this);

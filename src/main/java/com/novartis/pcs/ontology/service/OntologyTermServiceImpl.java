@@ -301,7 +301,7 @@ public class OntologyTermServiceImpl extends OntologyService implements Ontology
 			newTerm.setComments(comments.trim());
 		}
 		
-		if(relatedTermRefId != null) {
+		if(!ontology.isCodelist() && relatedTermRefId != null) {
 			Term relatedTerm = termDAO.loadByReferenceId(relatedTermRefId);
 			RelationshipType type = relationshipTypeDAO.loadByRelationship(relationshipType);
 			

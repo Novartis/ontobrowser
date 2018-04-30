@@ -23,7 +23,10 @@ a, a:link, a:visited, a:hover, a:active {
 .gwt-MenuBar .gwt-MenuItem {
 	font-family: verdana,helvetica,arial;
 	font-size: 11px;
-	color: #333333;
+}
+
+.gwt-MenuBar .gwt-MenuItem-disabled {
+	color: #999999 !important;
 }
 
 .gwt-TextArea, .gwt-TextBox {

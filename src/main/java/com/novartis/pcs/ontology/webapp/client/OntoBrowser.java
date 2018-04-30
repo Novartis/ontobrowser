@@ -18,6 +18,8 @@ limitations under the License.
 package com.novartis.pcs.ontology.webapp.client;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -35,7 +37,9 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.novartis.pcs.ontology.entity.Curator;
 import com.novartis.pcs.ontology.entity.CuratorApprovalWeight.Entity;
 import com.novartis.pcs.ontology.entity.Ontology;
@@ -45,6 +49,7 @@ import com.novartis.pcs.ontology.webapp.client.view.AddRelationshipPopup;
 import com.novartis.pcs.ontology.webapp.client.view.AddSynonymPopup;
 import com.novartis.pcs.ontology.webapp.client.view.ApproveRejectPopup;
 import com.novartis.pcs.ontology.webapp.client.view.ChangePasswordPopup;
+import com.novartis.pcs.ontology.webapp.client.view.CodeListView;
 import com.novartis.pcs.ontology.webapp.client.view.CreateChildTermPopup;
 import com.novartis.pcs.ontology.webapp.client.view.CrossRefPopup;
 import com.novartis.pcs.ontology.webapp.client.view.ErrorView;
@@ -73,6 +78,16 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 			GWT.create(OntoBrowserService.class);
 	
 	private final MenuBar menuBar = new MenuBar();
+	private final Collection<MenuItem> ontologyMenuItems = new ArrayList<MenuItem>();
+	
+	private final DockLayoutPanel layoutPanel = new DockLayoutPanel(Unit.PX);
+	private final FlowPanel centrePanel = new FlowPanel();
+	private final HorizontalPanel southPanel = new HorizontalPanel();
+	
+	private final SVGView svgView = new SVGView(eventBus, service);
+	private final CodeListView codelistView = new CodeListView(eventBus, service);
+	
+	private Widget currentCentrePanel = null;
 	
 	/**
 	 * This is the entry point method.
@@ -81,7 +96,8 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 	public void onModuleLoad() {
 		GWT.setUncaughtExceptionHandler(ErrorView.instance());
 		History.addValueChangeHandler(this);
-		layoutViews();
+		layoutViews(false);
+		RootLayoutPanel.get().add(layoutPanel);
 		
 		final String historyToken = History.getToken();
 		if(historyToken != null && historyToken.length() > 0) {
@@ -91,7 +107,7 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 		service.loadRootTerms(new AsyncCallback<List<Term>>() {			
 			@Override
 			public void onSuccess(List<Term> terms) {
-				createOntologyMenu(terms);
+				createMenus(terms);
 								
 				// If the application starts with no history token,
 				// redirect to a new initial state.
@@ -137,6 +153,13 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 
 				public void onSuccess(Term term) {
 					if(term != null) {
+						boolean codelist = term.getOntology().isCodelist(); 
+						layoutViews(codelist);
+						
+						for(MenuItem menuItem : ontologyMenuItems) {
+							menuItem.setEnabled(!codelist);
+						}
+						
 						eventBus.fireEvent(new ViewTermEvent(term));
 					}
 				}
@@ -144,18 +167,70 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 		}
 	}
 	
-	private void layoutViews() {
+	private void layoutViews(boolean isCodelist) {
+		if(currentCentrePanel == null) {
+			Panel eastPanel = createEastPanel();
+			createCentrePanel();
+			createSouthPanel();
+						
+			layoutPanel.addNorth(menuBar, 30);		
+			layoutPanel.addEast(eastPanel, 330);
+		}
+	
+		if(!isCodelist && currentCentrePanel != svgView) {
+			southPanel.setWidth("100%");
+			layoutPanel.addSouth(southPanel, 197);	
+			
+			if(currentCentrePanel != null) {
+				layoutPanel.remove(currentCentrePanel);
+				layoutPanel.remove(codelistView);
+			}
+						
+			layoutPanel.add(svgView);
+			currentCentrePanel = svgView;
+		} else if(isCodelist && currentCentrePanel != centrePanel) {
+			if(currentCentrePanel != null) {
+				layoutPanel.remove(currentCentrePanel);
+			}
+			layoutPanel.remove(southPanel);
+			layoutPanel.addWest(codelistView, 440);
+			layoutPanel.add(centrePanel);
+			currentCentrePanel = centrePanel;
+		}
+	}
+	
+	private Panel createCentrePanel() {
 		TermDetailsView termView = new TermDetailsView(eventBus, service);
 		TermSynonymsView synonymsView = new TermSynonymsView(eventBus, service);
-		RelatedTermsView relationshipsView = new RelatedTermsView(eventBus, service);
+		synonymsView.addStyleName("remaining-height");
+		
+		centrePanel.add(termView);
+		centrePanel.add(synonymsView);
+		
+		return centrePanel;
+		
+	}
+	
+	private Panel createEastPanel() {
 		SearchInputView searchInputView = new SearchInputView(eventBus, service);
 		SearchOptionsView searchOptionsView = new SearchOptionsView(eventBus, service);
 		SearchResultsView searchResultsView = new SearchResultsView(eventBus, service, searchOptionsView);
-		SVGView svgView = new SVGView(eventBus, service);
-		//CodeListView codelistView = new CodeListView(eventBus, service);
-				
-		DockLayoutPanel layoutPanel = new DockLayoutPanel(Unit.PX);
-		HorizontalPanel southPanel = new HorizontalPanel();	
+		
+		FlowPanel eastPanel = new FlowPanel();										
+		eastPanel.add(searchInputView);
+		eastPanel.add(searchOptionsView);
+		eastPanel.add(searchResultsView);
+		
+		return eastPanel;
+	}
+	
+	private Panel createSouthPanel() {
+		TermDetailsView termView = new TermDetailsView(eventBus, service);
+		TermSynonymsView synonymsView = new TermSynonymsView(eventBus, service);
+		RelatedTermsView relationshipsView = new RelatedTermsView(eventBus, service);
+		
+		synonymsView.addStyleName("fixed-height");
+		
 		southPanel.add(termView);
 		southPanel.add(synonymsView);
 		southPanel.add(relationshipsView);
@@ -163,37 +238,31 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 		southPanel.setCellWidth(termView, "33.33%");
 		southPanel.setCellWidth(synonymsView, "33.33%");
 		southPanel.setCellWidth(relationshipsView, "33.33%");
-		southPanel.setWidth("100%");
 		
-		FlowPanel eastPanel = new FlowPanel();										
-		eastPanel.add(searchInputView);
-		eastPanel.add(searchOptionsView);
-		eastPanel.add(searchResultsView);
-				
-		layoutPanel.addNorth(menuBar, 30);
-		layoutPanel.addSouth(southPanel, 197);		
-		layoutPanel.addEast(eastPanel, 300);	
-		layoutPanel.add(svgView);
-				
-		RootLayoutPanel.get().add(layoutPanel);
+		return southPanel;
 	}
 		
-	private void createOntologyMenu(List<Term> terms) {
-		MenuBar menu = new MenuBar(true);
-		menu.setAnimationEnabled(true);
+	private void createMenus(List<Term> terms) {
+		MenuBar ontologyMenu = new MenuBar(true);
+		MenuBar codelistMenu = new MenuBar(true);
+		
+		ontologyMenu.setAnimationEnabled(true);
+		codelistMenu.setAnimationEnabled(true);
 		
 		for(final Term term : terms) {
 			Ontology ontology = term.getOntology();
-			if(!ontology.isCodelist()) {
-				menu.addItem(ontology.getName(), new Command() {
-					public void execute() {
-						History.newItem(term.getReferenceId());
-					}
-				});
-			}
+			MenuBar menu = ontology.isCodelist() ?
+					codelistMenu : ontologyMenu;
+			menu.addItem(ontology.getName(), new Command() {
+				public void execute() {
+					History.newItem(term.getReferenceId());
+				}
+			});
+
 		}
-				
-		menuBar.insertItem(new MenuItem("Ontology", menu), 0);
+		
+		menuBar.insertItem(new MenuItem("Ontology", ontologyMenu), 0);
+		menuBar.insertItem(new MenuItem("Codelist", codelistMenu), 1);
 	}
 	
 	private void createPopups(Curator curator) {
@@ -210,13 +279,13 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 			menu.setAnimationEnabled(true);
 			createPopupMenuItem(menu, "Map Synonyms", crossRefPopup);
 			createPopupMenuItem(menu, "Approve", approveRejectPopup);
-			createPopupMenuItem(menu, "Create Child Term", createTermPopup);
 			createPopupMenuItem(menu, "Add Synonym", addSynonymPopup);
-			createPopupMenuItem(menu, "Add Relationship", addRelationshipPopup);
+			ontologyMenuItems.add(createPopupMenuItem(menu, "Add Relationship", addRelationshipPopup));
+			ontologyMenuItems.add(createPopupMenuItem(menu, "Create Child Term", createTermPopup));
 			
 			if(BigDecimal.ONE.equals(curator.getEntityApprovalWeight(Entity.TERM))) {
 				ReplaceTermPopup replaceTermPopup = new ReplaceTermPopup(service, eventBus);
-				createPopupMenuItem(menu, "Obsolete Term", replaceTermPopup);
+				ontologyMenuItems.add(createPopupMenuItem(menu, "Obsolete Term", replaceTermPopup));
 			}
 			
 			menuBar.addItem("Curate", menu);
@@ -235,8 +304,8 @@ public class OntoBrowser implements EntryPoint, ValueChangeHandler<String> {
 		}
 	}
 	
-	private void createPopupMenuItem(MenuBar menu, final String text, final OntoBrowserPopup popup) {
-		menu.addItem(text, new Command() {
+	private MenuItem createPopupMenuItem(MenuBar menu, final String text, final OntoBrowserPopup popup) {
+		return menu.addItem(text, new Command() {
 			public void execute() {
 				popup.show();
 			}

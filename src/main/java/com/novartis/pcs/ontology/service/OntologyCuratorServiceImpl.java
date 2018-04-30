@@ -138,19 +138,23 @@ public class OntologyCuratorServiceImpl extends OntologyService implements Ontol
 		Term term = termDAO.load(termId, true);
 		Version version = lastUnpublishedVersion(curator);
 		
-		if(term.getRelationships() == null 
-				|| StatusChecker.valid(term.getRelationships()).size() == 0) {
-			throw new InvalidEntityException(term, "Cannot approve term with no valid relationships");
+		if(!term.getOntology().isCodelist()) {
+			if(term.getRelationships() == null 
+					|| StatusChecker.valid(term.getRelationships()).size() == 0) {
+				throw new InvalidEntityException(term, "Cannot approve term with no valid relationships");
+			}
 		}
 		
 		createCuratorActionAndUpdateStatus(term, Action.APPROVE,
 				Status.APPROVED, curator, comments, version);
 				
-		for(Relationship relationship : term.getRelationships()) {
-			if(relationship.getStatus().equals(Status.PENDING) 
-					&& relationship.getRelatedTerm().getStatus().equals(Status.APPROVED)) {
-				createCuratorActionAndUpdateStatus(relationship, Action.APPROVE,
-						Status.APPROVED, curator, comments, version);
+		if(!term.getOntology().isCodelist()) {
+			for(Relationship relationship : term.getRelationships()) {
+				if(relationship.getStatus().equals(Status.PENDING) 
+						&& relationship.getRelatedTerm().getStatus().equals(Status.APPROVED)) {
+					createCuratorActionAndUpdateStatus(relationship, Action.APPROVE,
+							Status.APPROVED, curator, comments, version);
+				}
 			}
 		}
 		
@@ -198,16 +202,18 @@ public class OntologyCuratorServiceImpl extends OntologyService implements Ontol
 				}
 			}
 			
-			for(Relationship relationship : term.getRelationships()) {
-				if(relationship.getStatus().equals(Status.PENDING)) {
-					relationship.setStatus(Status.REJECTED);
+			if(!term.getOntology().isCodelist()) {
+				for(Relationship relationship : term.getRelationships()) {
+					if(relationship.getStatus().equals(Status.PENDING)) {
+						relationship.setStatus(Status.REJECTED);
+					}
 				}
-			}
-			
-			Collection<Relationship> descendents = relationshipDAO.loadByRelatedTermId(termId);
-			for (Relationship relationship : descendents) {
-				if(relationship.getStatus().equals(Status.PENDING)) {
-					relationship.setStatus(Status.REJECTED);
+				
+				Collection<Relationship> descendents = relationshipDAO.loadByRelatedTermId(termId);
+				for (Relationship relationship : descendents) {
+					if(relationship.getStatus().equals(Status.PENDING)) {
+						relationship.setStatus(Status.REJECTED);
+					}
 				}
 			}
 		}
