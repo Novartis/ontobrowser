@@ -22,9 +22,9 @@ The OntoBrowser tool was developed to manage ontologies (and controlled terminol
 * [Security Review](doc/security_review.md)
 
 # Publication
-**OntoBrowser: a collaborative tool for curation of ontologies by subject matter experts**
-*Bioinformatics*, Volume 33, Issue 1, 1 January 2017, Pages 148–149
-<https://doi.org/10.1093/bioinformatics/btw579>
+**OntoBrowser: a collaborative tool for curation of ontologies by subject matter experts**  
+*Bioinformatics*, Volume 33, Issue 1, 1 January 2017, Pages 148–149  
+<https://doi.org/10.1093/bioinformatics/btw579>  
 
 # Acknowledgements
 The OntoBrowser was initially developed in frame of the eTOX consortium. It has received support from the Innovative Medicines Initiative Joint Undertaking under grant agreement n°115002, resources of which are composed of financial contribution from the European Union's Seventh Framework Programme (FP7/2007-2013) and EFPIA companies' in kind contribution. We would like to formally acknowledge the contribution to the eTOX project of all scientists and other staff involved.
