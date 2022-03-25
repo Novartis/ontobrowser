@@ -36,7 +36,7 @@ import com.novartis.pcs.ontology.entity.RelationshipType;
 import com.novartis.pcs.ontology.webapp.client.OntoBrowserServiceAsync;
 import com.novartis.pcs.ontology.webapp.client.event.RelationshipUpdatedEvent;
 
-public class EditRelationshipPopup implements OntoBrowserEditPopup<Relationship>, ClickHandler {
+public class EditRelationshipPopup extends EditPopup implements OntoBrowserEditPopup<Relationship>, ClickHandler {
 	private final OntoBrowserServiceAsync service;
 	private final EventBus eventBus;
 	private final DialogBox dialogBox = new DialogBox(false, true);
@@ -92,11 +92,6 @@ public class EditRelationshipPopup implements OntoBrowserEditPopup<Relationship>
 			});
 			
 		}
-	}
-	
-	@Override
-	public void show() {
-		dialogBox.center();
 	}
 
 	@Override
