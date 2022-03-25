@@ -27,6 +27,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 
+import com.novartis.pcs.ontology.service.util.RemoveInvalidStatus;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -73,21 +74,21 @@ public class OntologyTermServiceImpl extends OntologyService implements Ontology
 	public Collection<Term> loadAll(String ontologyName) {
 		Ontology ontology = ontologyDAO.loadByName(ontologyName);
 		Collection<Term> terms = termDAO.loadAll(ontology);
-		StatusChecker.removeInvalid(terms);
+		RemoveInvalidStatus.removeInvalid(terms);
     	return terms;
 	}
 
 	@Override
     public Collection<Term> loadRoots() {
     	Collection<Term> terms = termDAO.loadRoots();
-    	StatusChecker.removeInvalid(terms);
+		RemoveInvalidStatus.removeInvalid(terms);
     	return terms;
     }
         
     @Override
 	public Collection<Term> loadLastCreated(int max) {
     	Collection<Term> terms = termDAO.loadLastCreated(max);
-    	StatusChecker.removeInvalid(terms);
+		RemoveInvalidStatus.removeInvalid(terms);
     	return terms;
 	}
 
@@ -99,7 +100,7 @@ public class OntologyTermServiceImpl extends OntologyService implements Ontology
     @Override
     public Collection<RelationshipType> loadAllRelationshipTypes() {
     	Collection<RelationshipType> types = relationshipTypeDAO.loadAll();
-    	StatusChecker.removeInvalid(types);
+		RemoveInvalidStatus.removeInvalid(types);
     	return types;
     }
 	
