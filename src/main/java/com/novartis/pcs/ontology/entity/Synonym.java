@@ -225,4 +225,16 @@ public class Synonym extends VersionedEntity implements ReplaceableEntity<Synony
 	public String toString() {
 		return getSynonym();
 	}
+
+	public Synonym saveNewSynonym(Version version) {
+		setStatus(getStatus());
+		if(getStatus().equals(Status.APPROVED)) {
+			setApprovedVersion(version);
+		}
+		setControlledVocabularyTerm(getControlledVocabularyTerm());
+		setDatasource(getDatasource());
+		setReferenceId(getReferenceId());
+		setUrl(getUrl());
+		return this;
+	}
 }
