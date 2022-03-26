@@ -21,7 +21,7 @@ public class UrlParser {
 	
 	@SuppressWarnings("unused")
 	public static String parse(String spec) {
-		int i, limit, c;
+		int i, limit, character;
 		int start = 0;
 
 		String protocol = null;
@@ -46,8 +46,8 @@ public class UrlParser {
 			}
 
 			for (i = start ; (i < limit) &&
-			((c = spec.charAt(i)) != '/') ; i++) {
-				if (c == ':') {
+			((character = spec.charAt(i)) != '/') ; i++) {
+				if (character == ':') {
 					String s = spec.substring(start, i).toLowerCase();
 					if (isValidProtocol(s)) {
 						protocol = s;
