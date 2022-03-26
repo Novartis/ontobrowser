@@ -40,7 +40,7 @@ import com.novartis.pcs.ontology.webapp.client.OntoBrowserServiceAsync;
 import com.novartis.pcs.ontology.webapp.client.event.TermUpdatedEvent;
 import com.novartis.pcs.ontology.webapp.client.util.UrlValidator;
 
-public class EditTermPopup implements OntoBrowserEditPopup<Term>, ClickHandler, KeyPressHandler {
+public class EditTermPopup extends EditPopup implements OntoBrowserEditPopup<Term>, ClickHandler, KeyPressHandler {
 	private static final int MAX_LEN = 64;
 	
 	private final OntoBrowserServiceAsync service;
@@ -81,13 +81,6 @@ public class EditTermPopup implements OntoBrowserEditPopup<Term>, ClickHandler, 
 		
 		addDialogWidgets();
 		updateButton.addClickHandler(this);
-	}
-	
-	@Override
-	public void show() {
-		if(term != null) {
-			dialogBox.center();
-		}
 	}
 		
 	@Override

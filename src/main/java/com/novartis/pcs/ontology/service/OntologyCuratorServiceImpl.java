@@ -352,16 +352,9 @@ public class OntologyCuratorServiceImpl extends OntologyService implements Ontol
 			
 			for(Synonym synonym : term.getSynonyms()) {
 				if(StatusChecker.isValid(synonym)) {
-					Synonym newSynonym = new Synonym(replacementTerm, synonym.getSynonym(), 
+					Synonym newSynonym = new Synonym(replacementTerm, synonym.getSynonym(),
 							synonym.getType(), curator, version);
-					newSynonym.setStatus(synonym.getStatus());
-					if(synonym.getStatus().equals(Status.APPROVED)) {
-						newSynonym.setApprovedVersion(version);
-					}
-					newSynonym.setControlledVocabularyTerm(synonym.getControlledVocabularyTerm());
-					newSynonym.setDatasource(synonym.getDatasource());
-					newSynonym.setReferenceId(synonym.getReferenceId());
-					newSynonym.setUrl(synonym.getUrl());
+					newSynonym = newSynonym.saveNewSynonym(version);
 					synonymDAO.save(newSynonym);
 					
 					if(synonym.getStatus().equals(Status.APPROVED)) {

@@ -1,4 +1,4 @@
-/* 
+/*
 
 Copyright 2015 Novartis Institutes for Biomedical Research
 
@@ -42,16 +42,6 @@ public class StatusChecker {
 					: new InvalidEntityException(entity, "Entity not found");
 			}
 		}
-	}
-	
-	public static <T extends VersionedEntity> boolean removeInvalid(Collection<T> entities) {
-		Set<T> invalid = new HashSet<T>();
-    	for(T entity : entities) {
-    		if(!StatusChecker.isValid(entity)) {
-    			invalid.add(entity);
-    		}
-    	}
-    	return invalid.isEmpty() ? false : entities.removeAll(invalid);
 	}
 	
 	public static <T extends VersionedEntity> Collection<T> valid(Collection<T> entities) {

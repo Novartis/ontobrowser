@@ -190,11 +190,6 @@ class OntologyExportUtil {
 		relationshipIRIs.put("produced_by",createIRI(oboURI, "RO_0003001"));
 	}
 	
-	static boolean isBuiltIn(RelationshipType type) {
-		String r = type.getRelationship();
-		return r.equals("is_a") || r.equals("union_of") || r.equals("disjoint_from");
-	}
-	
 	static String escapeOBO(String s) {
 		return escapeOBO(s, true);
 	}

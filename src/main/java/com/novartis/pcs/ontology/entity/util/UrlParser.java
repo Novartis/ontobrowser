@@ -21,7 +21,7 @@ public class UrlParser {
 	
 	@SuppressWarnings("unused")
 	public static String parse(String spec) {
-		int i, limit, c;
+		int i, limit, character;
 		int start = 0;
 
 		String protocol = null;
@@ -46,8 +46,8 @@ public class UrlParser {
 			}
 
 			for (i = start ; (i < limit) &&
-			((c = spec.charAt(i)) != '/') ; i++) {
-				if (c == ':') {
+			((character = spec.charAt(i)) != '/') ; i++) {
+				if (character == ':') {
 					String s = spec.substring(start, i).toLowerCase();
 					if (isValidProtocol(s)) {
 						protocol = s;
@@ -159,43 +159,7 @@ public class UrlParser {
 				path = "";
 
 			if (isRelPath) {
-				// Remove embedded /./
-				while ((i = path.indexOf("/./")) >= 0) {
-					path = path.substring(0, i) + path.substring(i + 2);
-				}
-				// Remove embedded /../ if possible
-				i = 0;
-				while ((i = path.indexOf("/../", i)) >= 0) {
-					/* 
-					 * A "/../" will cancel the previous segment and itself, 
-					 * unless that segment is a "/../" itself
-					 * i.e. "/a/b/../c" becomes "/a/c"
-					 * but "/../../a" should stay unchanged
-					 */
-					if (i > 0 && (limit = path.lastIndexOf('/', i - 1)) >= 0 &&
-							(path.indexOf("/../", limit) != 0)) {
-						path = path.substring(0, limit) + path.substring(i + 3);
-						i = 0;
-					} else {
-						i = i + 3;
-					}
-				}
-				// Remove trailing .. if possible
-				while (path.endsWith("/..")) {
-					i = path.indexOf("/..");
-					if ((limit = path.lastIndexOf('/', i - 1)) >= 0) {
-						path = path.substring(0, limit+1);
-					} else {
-						break;
-					}
-				}
-				// Remove starting .
-				if (path.startsWith("./") && path.length() > 2)
-					path = path.substring(2);
-
-				// Remove trailing .
-				if (path.endsWith("/."))
-					path = path.substring(0, path.length() -1);
+				path = formatPath(path);
 			}
 
 			if(host == null || host.length() == 0) {
@@ -243,6 +207,49 @@ public class UrlParser {
 		} catch(Exception e) {
 			throw new IllegalArgumentException(e.getMessage());
 		}
+	}
+
+	private static String formatPath(String path) {
+		int i;
+		int limit;
+		// Remove embedded /./
+		while ((i = path.indexOf("/./")) >= 0) {
+			path = path.substring(0, i) + path.substring(i + 2);
+		}
+		// Remove embedded /../ if possible
+		i = 0;
+		while ((i = path.indexOf("/../", i)) >= 0) {
+			/*
+			 * A "/../" will cancel the previous segment and itself,
+			 * unless that segment is a "/../" itself
+			 * i.e. "/a/b/../c" becomes "/a/c"
+			 * but "/../../a" should stay unchanged
+			 */
+			if (i > 0 && (limit = path.lastIndexOf('/', i - 1)) >= 0 &&
+					(path.indexOf("/../", limit) != 0)) {
+				path = path.substring(0, limit) + path.substring(i + 3);
+				i = 0;
+			} else {
+				i = i + 3;
+			}
+		}
+		// Remove trailing .. if possible
+		while (path.endsWith("/..")) {
+			i = path.indexOf("/..");
+			if ((limit = path.lastIndexOf('/', i - 1)) >= 0) {
+				path = path.substring(0, limit+1);
+			} else {
+				break;
+			}
+		}
+		// Remove starting .
+		if (path.startsWith("./") && path.length() > 2)
+			path = path.substring(2);
+
+		// Remove trailing .
+		if (path.endsWith("/."))
+			path = path.substring(0, path.length() -1);
+		return path;
 	}
 
 	public static boolean isValidProtocol(String protocol) {

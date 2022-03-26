@@ -37,7 +37,7 @@ import com.novartis.pcs.ontology.webapp.client.OntoBrowserServiceAsync;
 import com.novartis.pcs.ontology.webapp.client.event.SynonymUpdatedEvent;
 import com.novartis.pcs.ontology.webapp.client.util.UrlValidator;
 
-public class EditSynonymPopup implements OntoBrowserEditPopup<Synonym>, ClickHandler {
+public class EditSynonymPopup extends EditPopup implements OntoBrowserEditPopup<Synonym>, ClickHandler {
 	private final static String[] LABELS = {
 			"Ontology/Codelist", "Term", "Synonym", "Type" 
 		};
@@ -141,11 +141,6 @@ public class EditSynonymPopup implements OntoBrowserEditPopup<Synonym>, ClickHan
 		
 				
 		dialogBox.setWidget(dialogVPanel);
-	}
-
-	@Override
-	public void show() {
-		dialogBox.center();
 	}
 
 	@Override
