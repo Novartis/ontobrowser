@@ -21,7 +21,6 @@ import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.create
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.escapeOBO;
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.escapeQuoted;
 import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.getRelationshipIRI;
-import static com.novartis.pcs.ontology.service.export.OntologyExportUtil.isBuiltIn;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -166,6 +165,11 @@ public class OntologyExportServiceImpl implements OntologyExportServiceRemote, O
 		default:
 			throw new IllegalArgumentException("Invalid/Unsupported ontology export format: " + format);
 		}
+	}
+
+	private boolean isBuiltIn(RelationshipType type) {
+		String r = type.getRelationship();
+		return r.equals("is_a") || r.equals("union_of") || r.equals("disjoint_from");
 	}
 
 	private void exportAsOBO(Ontology ontology, OutputStream os, 
